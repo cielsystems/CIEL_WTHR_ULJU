@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ImageResizer.Plugins.RedEye</name>
+    </assembly>
+    <members>
+        <member name="M:ImageResizer.Plugins.RedEye.RedEyePlugin.Pipeline_PreHandleImage(System.Web.IHttpModule,System.Web.HttpContext,ImageResizer.Caching.IResponseArgs)">
+            <summary>
+            This is where we hijack the resizing process, interrupt it, and send back the json data we created.
+            </summary>
+            <param name="sender"></param>
+            <param name="context"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:ImageResizer.Plugins.RedEye.AdaptiveCircleFill">
+            <summary>
+            Adaptive thresholding flood fill optimized for round objects. 
+            </summary>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.#ctor(AForge.Imaging.UnmanagedImage,System.Drawing.Point,System.Drawing.PointF,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="red">A grayscale image filtered using a redness algorithm</param>
+            <param name="startAt">The maximum brightness point, the place to start filling</param>
+            <param name="origin">The origin of the search, usually the click</param>
+            <param name="maxRadius">The maximum distance from 'startAt' to consider filling</param>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.MarkEye(AForge.Imaging.UnmanagedImage,System.Drawing.Point,System.Int32,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="image"></param>
+            <param name="start"></param>
+            <param name="maxEyeRadius">Should be 2-3 percent of max(width/height)</param>
+            <param name="maxPointSearchDistance">In source pixels, the max distance from 'start' from which to look for the starting point. Good default: roughly 24 display pixels.</param>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.red">
+            <summary>
+            An 8-bit image with a redness algorithm applied.
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.StartAt">
+            <summary>
+            The pixel at which to begin filling
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.MinValue">
+            <summary>
+            The absolute minimum brightness to include. Should probably be set to 3/8ths the maximum pixel brightness.
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.MaxValue">
+            <summary>
+            The maximum brightness expected. Used to provide a range for threshold expectations
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.Origin">
+            <summary>
+            The user-specified origin - used to adjust local thresholding.
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.OriginStartOffset">
+            <summary>
+            The distance between origin and startat
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.MaxRadius">
+            <summary>
+            The maximum radius around StartAt in which to fill
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.SumX">
+            <summary>
+            Sum of the X values of all filled pixels.
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.SumY">
+            <summary>
+            Sum of the Y values of all filled pixels
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.SumV">
+            <summary>
+            Sum of the values of all filled pixels
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.FilledCount">
+            <summary>
+            The number of filled pixels. 
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.WeightedCenter">
+            <summary>
+            Set after the first pass, once we know the appropriate center
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.FilledRadius">
+            <summary>
+            Set after the first pass, once we know the farthest outlying point.
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.FillAverage">
+            <summary>
+            The average value of the filled area
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.filledArray">
+            <summary>
+            An array matching the bitmap data, marking which pixels are considered filled.
+            </summary>
+        </member>
+        <member name="F:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.q">
+            <summary>
+            A queue of points which have been filled, but their neighbors not yet evalutated.
+            </summary>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.FillPoints(System.Boolean)">
+            <summary>
+            Dequeues points from 'q',  enqueues their eligible neighbors, and loops until empty.
+            </summary>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.AdaptiveCircleFill.CorrectRedEye(AForge.Imaging.UnmanagedImage,System.Int32,System.Int32)">
+            <summary>
+            Using the fill array calculated in passes 1 and 2, apply red-eye correction to the specified image. 
+            </summary>
+            <param name="image"></param>
+            <param name="ox"></param>
+            <param name="oy"></param>
+        </member>
+        <member name="T:ImageResizer.Plugins.RedEye.RedEyeFilter">
+            <summary>
+            Turns color images into grayscale images using a specialized filter that makes the red eyes stand out brightly against their background..
+            </summary>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.RedEyeFilter.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ImageResizer.Plugins.RedEye.RedEyeFilter"/> class.
+            </summary>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.RedEyeFilter.#ctor(System.Int16)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ImageResizer.Plugins.RedEye.RedEyeFilter"/> class.
+            </summary>
+            <param name="alg">The algorithm to use for filtering the image.</param>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.RedEyeFilter.ProcessFilter(AForge.Imaging.UnmanagedImage,AForge.Imaging.UnmanagedImage)">
+            <summary>
+            Process the filter on the specified image.
+            </summary>
+            <param name="sourceData">Source image data.</param>
+            <param name="destinationData">Destination image data.</param>
+        </member>
+        <member name="P:ImageResizer.Plugins.RedEye.RedEyeFilter.FormatTranslations">
+            <summary>
+            Format translations dictionary.
+            </summary>
+        </member>
+        <member name="T:ImageResizer.Plugins.RedEye.ManualSearcher">
+            <summary>
+            Looks for the 'best' pixel within a given radius from a specified point, where 'best' is the brightest pixel after applying a red-eye filter. Uses weighted evaluation.
+            </summary>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.ManualSearcher.FindMaxPixel(AForge.Imaging.UnmanagedImage,System.Drawing.PointF,System.Single)">
+            <summary>
+            Looks for the brightest pixel after applying a redness filter. Narrows search first using a resampled copy of the image to eliminate edge dots. 
+            Expects an image that is already cropped to the interested area for faster processing.
+            </summary>
+            <param name="img"></param>
+            <param name="mouse"></param>
+            <param name="maxDistanceFromMouse"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.ManualSearcher.GetMax(AForge.Imaging.UnmanagedImage,System.Drawing.PointF,System.Double)">
+            <summary>
+            Searches for the brightest pixel in an 8-bit image. Optionally weights the pixel values using a cosine curve based on the ratio of the (pixel's distance from 'weight') to 'maxDistance'.
+            </summary>
+            <param name="red"></param>
+            <param name="weight"></param>
+            <param name="maxDistance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ImageResizer.Plugins.RedEye.EyeDetection.DetectFeatures(OpenCvSharp.IplImage,OpenCvSharp.CvMemStorage)">
+            <summary>
+            Detects features on a grayscale image.
+            </summary>
+            <param name="img"></param>
+            <param name="storage"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

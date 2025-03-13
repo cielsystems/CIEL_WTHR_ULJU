@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ImageResizer.Plugins.MongoReader</name>
+    </assembly>
+    <members>
+        <member name="P:ImageResizer.Plugins.MongoReader.MongoReaderPlugin.GridFS">
+            <summary>
+            A reference to the GridFS instance used to retrieve files.
+            </summary>
+        </member>
+        <member name="P:ImageResizer.Plugins.MongoReader.MongoReaderPlugin.VirtualFilesystemPrefix">
+            <summary>
+            Requests starting with this path will be handled by this virtual path provider. Should be in app-relative form: "~/gridfs/". Will be converted to root-relative form upon assigment. Trailing slash required, auto-added.
+            </summary>
+        </member>
+    </members>
+</doc>

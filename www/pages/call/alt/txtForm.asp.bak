@@ -1,0 +1,21 @@
+﻿<!--#include virtual="/common/common.asp"-->
+
+<% mnCD = "0103" %>
+
+<!--#include virtual="/common/header_htm.asp"-->
+
+<div class="flexBox">
+	
+	<div>1</div>
+	<div>2</div>
+	
+</div>
+
+<!--#include virtual="/common/footer_htm.asp"-->
+
+<script type="text/javascript">
+	
+	$(function(){
+	});
+	
+</script>
